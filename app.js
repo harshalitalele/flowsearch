@@ -31,29 +31,24 @@ function createTableElem(infoArr, numRec) {
 
 function getResults() {
 	let query = document.getElementById('search-box').value;
-	sendXMLReq(query, function(data) {
-		let records = [];
-		for(let res in data.docs) {
-			let tempRecord = [];
-			tempRecord.push(data.docs[res].id);
-			tempRecord.push(data.docs[res].book);
-			tempRecord.push(data.docs[res].text);
-			records.push(tempRecord);
-		}
+	//sendXMLReq(query, function(data) {
 
-		$(document).ready(function() {
-		    $('#example').DataTable( {
-		        data: records,
-		        columns: [
-		            { title: "id" },
-		            { title: "book" },
-		            { title: "text" }
-		        ]
-		    } );
-		} );
+		
 		/*document.getElementById('num-results').innerHTML = data.numFound;
 		let tableElem = createTableElem(data.docs, 10);
 		document.getElementById('print-data').innerHTML = "";
 		document.getElementById('print-data').appendChild(tableElem);*/
+	//});
+
+	$(document).ready(function() {
+	    $('#example').DataTable( {
+	        "ajax": "http://192.168.1.55:5000/query?q=" + query,
+	        "sAjaxDataProp": "response.docs",
+	        "columns": [
+	            { "data": "id" },
+	            { "data": "book" },
+	            { "data": "text" }
+	        ]
+	    });
 	});
 }
