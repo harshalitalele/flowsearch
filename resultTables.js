@@ -4,7 +4,11 @@ To Do:
 */
 class ResultsTable {
 	tableId;
+	tableFields;
 	constructor(data, fields, elementId) {
+		// Clear if already in table
+		document.getElementById(elementId).innerHTML = '';
+		this.tableFields = [];
 		// display method pass in the element id
 		this.displayTable(fields, elementId);
 		// Define num of records and fields this table will display
@@ -21,9 +25,10 @@ class ResultsTable {
 			let colElem = document.createElement('td');
 			colElem.innerHTML = i;
 			rowElem.appendChild(colElem);
-			for(let colIn in record) {
-				let col = record[colIn];
-				let colElem = document.createElement('td');
+			for(let colIn in this.tableFields) {
+				let key = this.tableFields[colIn],
+					col = record[key],
+					colElem = document.createElement('td');
 				colElem.innerHTML = col;
 				rowElem.appendChild(colElem);
 			}
@@ -37,11 +42,15 @@ class ResultsTable {
 		let tableElem = document.createElement('table');
 		this.tableId = elemId + '-table';
 		tableElem.setAttribute('id', this.tableId);
+		let headerElem = document.createElement('th');
+		headerElem.innerHTML = 'Sr no';
+		tableElem.appendChild(headerElem);
 		for(let titleIn in fields) {
 			let title = fields[titleIn];
-			let headerElem = document.createElement('th');
+			headerElem = document.createElement('th');
 			headerElem.innerHTML = title;
 			tableElem.appendChild(headerElem);
+			this.tableFields.push(title);
 		}
 		// append table to the parent element
 		document.getElementById(elemId).appendChild(tableElem);
