@@ -4,9 +4,11 @@ var xhttp = new XMLHttpRequest();	xhttp.onreadystatechange = function() {		if (x
 			response(data.response);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:5000/query?q=" + query, true);
+	xhttp.open("GET", "http://192.168.1.55:5000/query?q=" + query + "&rows=10", true);
 	xhttp.send();
 }
+
+let pageNo = 0;
 
 function createTableElem(infoArr, numRec) {
 	let tableElem = document.createElement('table');
@@ -31,24 +33,12 @@ function createTableElem(infoArr, numRec) {
 
 function getResults() {
 	let query = document.getElementById('search-box').value;
-	//sendXMLReq(query, function(data) {
-
-		
-		/*document.getElementById('num-results').innerHTML = data.numFound;
-		let tableElem = createTableElem(data.docs, 10);
+	sendXMLReq(query, function(data) {
+		document.getElementById('num-results').innerHTML = data.numFound;
+		let fields = ['id', 'book', 'text'],
+			resTable = new ResultsTable(data.docs, fields, 'print-data');
+		/*let tableElem = createTableElem(data.docs, 10);
 		document.getElementById('print-data').innerHTML = "";
 		document.getElementById('print-data').appendChild(tableElem);*/
-	//});
-
-	$(document).ready(function() {
-	    $('#example').DataTable( {
-	        "ajax": "http://192.168.1.55:5000/query?q=" + query,
-	        "sAjaxDataProp": "response.docs",
-	        "columns": [
-	            { "data": "id" },
-	            { "data": "book" },
-	            { "data": "text" }
-	        ]
-	    });
 	});
 }
