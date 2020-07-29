@@ -1,9 +1,10 @@
+/*
+To Do:
+1. By default, take all the fields in first row of data
+*/
 class ResultsTable {
 	tableId;
 	constructor(data, fields, elementId) {
-		// Take data input
-		// Take fields which we need to display as input
-		// Take element id as input
 		// display method pass in the element id
 		this.displayTable(fields, elementId);
 		// Define num of records and fields this table will display

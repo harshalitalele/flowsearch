@@ -4,7 +4,7 @@ var xhttp = new XMLHttpRequest();	xhttp.onreadystatechange = function() {		if (x
 			response(data.response);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:5000/query?q=" + query + "&rows=10", true);
+	xhttp.open("GET", "http://192.168.1.55:5000/query?q=" + query + "&rows=5", true);
 	xhttp.send();
 }
 
@@ -37,8 +37,5 @@ function getResults() {
 		document.getElementById('num-results').innerHTML = data.numFound;
 		let fields = ['id', 'book', 'text'],
 			resTable = new ResultsTable(data.docs, fields, 'print-data');
-		/*let tableElem = createTableElem(data.docs, 10);
-		document.getElementById('print-data').innerHTML = "";
-		document.getElementById('print-data').appendChild(tableElem);*/
 	});
 }
