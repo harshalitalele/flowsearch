@@ -28,7 +28,7 @@ class ResultsTable {
 				i++;
 				continue;
 			}
-			let record = data[i-1],
+			let record = data[i-1] ? data[i-1] : {},
 				rowElem = allRows[i],
 				allCols = rowElem.children;
 			

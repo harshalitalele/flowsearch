@@ -10,7 +10,7 @@ function sendXMLReq(query, response) {
 }
 
 let pageNo = 0,
-	numRec = 5
+	numRec = 7
 	query = '*',
 	resTable = null;
 
