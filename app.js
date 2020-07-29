@@ -10,7 +10,7 @@ function sendXMLReq(query, response) {
 }
 
 let pageNo = 0,
-	numRec = 7
+	numRec = 10
 	query = '*',
 	resTable = null;
 
@@ -53,7 +53,7 @@ function getResults() {
 	pageNo = 0;
 	query = document.getElementById('search-box').value;
 	sendXMLReq(query, function(data) {
-		let fields = ['id', 'book', 'text'];
+		let fields = ['id', 'isbn', 'book', 'figure', 'caption', 'text', 'flowchart'];
 		resTable = new ResultsTable(data, fields, 'print-data');
 	});
 }

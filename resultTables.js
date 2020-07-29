@@ -2,6 +2,8 @@
 To Do:
 1. By default, take all the fields in first row of data
 2. Add proper comments
+3. Clean <tr>'s if data[i] is not present
+4. Update Sr No properly on previous click
 */
 class ResultsTable {
 	tableId;
@@ -33,11 +35,16 @@ class ResultsTable {
 				allCols = rowElem.children;
 			
 			for(let colIn in this.tableFields) {
-				let key = this.tableFields[colIn],
-					col = key in record ? record[key] : this.srNo++,
+				let key = this.tableFields[colIn];
+				if(key == 'flowchart') {
+					let imgElem = allCols[colIn].children[0];
+					imgElem.src = "diabetes-new/" + record['id'] + '.jpeg';
+				} else {
+					let col = key in record ? record[key] : this.srNo++,
 					colElem = allCols[colIn];
-				
-				colElem.innerHTML = col;
+					
+					colElem.innerHTML = col;
+				}
 			}
 			i++;
 		}
@@ -68,6 +75,12 @@ class ResultsTable {
 			rowElem = document.createElement('tr');
 			for(let j in this.tableFields) {
 				let colElem = document.createElement('td');
+				if(this.tableFields[j] == 'flowchart') {
+					let imgElem = document.createElement('img');
+					imgElem.height = "250";
+					imgElem.width = "250";
+					colElem.appendChild(imgElem);
+				}
 				rowElem.appendChild(colElem);
 			}
 			tableElem.appendChild(rowElem);
