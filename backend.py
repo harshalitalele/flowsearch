@@ -7,9 +7,7 @@ import json
 application = Flask(__name__)
 cors = CORS(application, resources={r"/*": {"origins": "*"}})
 
-solr_ip = 'http://localhost:8983/solr/Diabetes/select?q=text%3A'
-#tweets_url = solr_ip + 'select?q={}&rows=10{}&fl=id,tweet_text,user.name,user.profile_image_url,tweet_urls,tweet_date,user.entities.url.urls.expanded_url'
-#replies_url = solr_ip + 'select?q={}&rows=100&fl=id,tweet_text'
+solr_ip = 'http://localhost:8983/solr/Diabetes/select?'
 
 @application.route("/")
 def home():
@@ -18,7 +16,16 @@ def home():
 @application.route('/query', methods = ['GET'])
 def fetchData():
     try:
-        datatest = urllib.request.urlopen(solr_ip + request.args.get('q'))
+        filters = request.args
+        queryStr = ''
+        for filt in filters:
+            if filt == 'q':
+                queryStr += filt + "=text:" + filters[filt]
+            else:
+                queryStr += "&" + filt + "=" + filters[filt]
+
+        print(queryStr)
+        datatest = urllib.request.urlopen(solr_ip + queryStr)
         docstest = json.load(datatest)
     except:
         print("An exception occurred for Query: " + query)
