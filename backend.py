@@ -32,31 +32,38 @@ def fetchData():
         docstest = '[]'
     return json.dumps(docstest)
 
-@application.route('/queryWithFilters', methods = ['POST'])
-def fetchDataAndFilter():
-    query = 'tweet_text:' + request.args.get('q')
-    query = urllib.parse.quote(query)
-    filters = request.get_json().get('data')
-    resp = {'tweets': [], 'count': 0}
-    facetq = ''
-    print(filters)
-    for f in filters:
-        if f == 'includeReplies':
-            if filters[f] == False:
-                facetq += '&fq=-in_reply_to_status_id:' + urllib.parse.quote('[* TO *]')
-        elif filters[f] != '' and filters[f] != None:
-            facetq += '&fq=' + f + ':' + urllib.parse.quote(filters[f])
-    print(facetq)
-    url = tweets_url.format(query, facetq)
-    print(url)
-    try:
-        datatest = json.load(urllib.request.urlopen(url))
-        resp['tweets'] = datatest['response']['docs']
-        resp['count'] = datatest['response']['numFound']
-    except:
-        print("An exception occurred for Query: " + query)
-    resp = json.dumps(resp)
-    return resp
+@application.route('/update', methods = ['POST'])
+def update():
+    data = request.json
+    data = urllib.parse.urlencode({"data":data}).encode()
+    print(data)
+    url = "http://localhost:8983/solr/Diabetes/update/json?_=1596513024938&commitWithin=1000&overwrite=true&wt=json"
+    req =  request.Request(url, data=data)
+    resp = request.urlopen(req)
+    #response = urllib.request.urlopen(url, data)
+    print(resp)
+    responsejson = json.load(resp)
+    return json.dumps(responsejson)
+
+@application.route('/test', methods = ['POST'])
+def testPOST():
+    print('req received')
+    data = request.json
+    print('data obtained')
+    responsejson = json.load(data)
+    print('data into json')
+    return json.dumps(responsejson)
+
+@application.route('/calltest', methods = ['GET'])
+def callTest():
+    info = '[{"id": "f261-02-9780323640596","isbn": "9780323640596","book": "Cameron/Current Surgical Therapy","figure": "200"}]'
+    data = urllib.parse.urlencode({"data":info}).encode()
+    print(data)
+    url1 = "http://localhost:5000/test"
+    resp = request.post(url1, data=json.dumps(info))
+    print(resp)
+    responsejson = json.load(resp)
+    return json.dumps(responsejson)
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
