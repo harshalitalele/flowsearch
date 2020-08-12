@@ -42,12 +42,18 @@ class ResultsTable {
 			for(let colIn in this.tableFields) {
 				let key = this.tableFields[colIn];
 				if(key == 'flowchart') {
-					let imgElem = allCols[colIn].children[0];
-					imgElem.src = "diabetes-new/" + record['id'] + '.jpeg';
+					let imgElem = allCols[colIn].children[0],
+						imgSrc = "diabetes-new/" + record['id'] + ".jpeg";
+					imgElem.src = imgSrc;
+					imgElem.onerror = function() {
+						imgSrc = "diabetes-new/" + record['id'] + ".jpg";
+						this.src = imgSrc;
+					};
 					imgElem.style.cursor = 'pointer';
 					imgElem.addEventListener('click', function() {
-						window.open("diabetes-new/" + record['id'] + '.jpeg');
+						window.open(imgSrc);
 					});
+
 				} else if(key == 'tags') {
 					//
 				} else {
