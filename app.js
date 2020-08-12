@@ -60,7 +60,7 @@ function getResults() {
 	pageNo = 0;
 	query = document.getElementById('search-box').value;
 	sendXMLReq(query, function(data) {
-		let fields = ['isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'tags', 'MedFocus'];
+		let fields = ['isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'MedFocus', 'tags'];
 		resTable = new ResultsTable(data, fields, 'print-data', labelOptions, updateSolr);
 	});
 }

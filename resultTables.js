@@ -128,8 +128,8 @@ class ResultsTable {
 				let colElem = document.createElement('td');
 				if(this.tableFields[j] == 'flowchart') {
 					let imgElem = document.createElement('img');
-					imgElem.height = "250";
-					imgElem.width = "250";
+					imgElem.height = "450";
+					imgElem.width = "450";
 					colElem.appendChild(imgElem);
 				} else if(this.tableFields[j] == 'tags') {
 					let tagElem = this.addTagsElem();
