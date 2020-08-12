@@ -14,11 +14,11 @@ let pageNo = 0,
 	query = '*',
 	resTable = null,
 	labelOptions = {
-		'Medical area of focus' : ['Surgery', 'Dermitology', 'Primary Care'],
-		'Focus or goal' : ['Diagnosis', 'Management', 'Treatment including procedures', 'Lab tests'],
-		'Setting for services' : ['Surgery', 'Urgent care', 'in patient', 'out patient'],
-		'Professional level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
-		'Use case': ['point of care', 'case review', 'study']
+		'Medical_area' : ['Surgery', 'Dermatology', 'Primary Care'],
+		'Focus' : ['Diagnosis', 'Management', 'Treatment including procedures', 'Lab tests'],
+		'Services' : ['Surgery', 'Urgent care', 'In patient', 'Out patient'],
+		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
+		'Use_case': ['{oint of care', 'Case review', 'Study']
 	};
 
 function goprev() {
@@ -60,7 +60,7 @@ function getResults() {
 	pageNo = 0;
 	query = document.getElementById('search-box').value;
 	sendXMLReq(query, function(data) {
-		let fields = ['isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'MedFocus', 'tags'];
+		let fields = ['id', 'isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'Labels', 'tags'];
 		resTable = new ResultsTable(data, fields, 'print-data', labelOptions, updateSolr);
 	});
 }
@@ -78,7 +78,7 @@ function updateSolr(id, updatedLabel) {
 		"id": id
 	};
 	for(let key in updatedLabel) {
-		jsonToUpdate["MedFocus"] = { 'add': updatedLabel[key]}
+		jsonToUpdate[key] = { 'add': updatedLabel[key]}
 	}
 	xhttp.send(JSON.stringify([jsonToUpdate]));
 }
@@ -96,10 +96,10 @@ function filterResults(elem) {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			let data = JSON.parse(xhttp.responseText.trim());
 			document.getElementById('num-results').innerHTML = data.response.numFound;
-			let fields = ['isbn', 'book', 'caption', /*'text',*/ 'flowchart', 'MedFocus'];
+			let fields = ['id', 'isbn', 'book', 'caption', /*'text',*/ 'flowchart', 'Labels'];
 			resTable = new ResultsTable(data.response.docs, fields, 'print-data', labelOptions, updateSolr);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:5000/query?q=*&fq=MedFocus%3A" + selectedLabel + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
+	xhttp.open("GET", "http://192.168.1.55:5000/query?q=*&fq=Medical_area%3A" + selectedLabel + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
 	xhttp.send();
 }

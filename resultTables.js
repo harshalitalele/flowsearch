@@ -12,6 +12,7 @@ class ResultsTable {
 	tableFields;
 	srNo;
 	labelOptions;
+	labelCats = ['Medical_area', 'Focus', 'Services', 'Professional_level', 'Use_case'];
 	constructor(data, fields, elementId, labelOptions, labelUpdateCallback) {
 		// Clear if already in table
 		document.getElementById(elementId).innerHTML = '';
@@ -55,11 +56,20 @@ class ResultsTable {
 					});
 
 				} else if(key == 'tags') {
-					//
+					continue;
 				} else if(key == 'Sr no') {
 					let col = this.srNo++,
 						colElem = allCols[colIn];
 					
+					colElem.innerHTML = col;
+				} else if(key == 'Labels') {
+					let col = '',
+						colElem = allCols[colIn];
+					for(let catIn in this.labelCats) {
+						let cat = this.labelCats[catIn];
+						if(record[cat] != undefined) 
+							col += cat + ': ' + record[cat] + '\n';
+					}
 					colElem.innerHTML = col;
 				} else {
 					let col = record[key],
@@ -79,6 +89,7 @@ class ResultsTable {
 		for(let selectLabel in this.labelOptions) {
 			let spanElem = document.createElement('span'),
 				selectElem = document.createElement('select');
+			selectElem.setAttribute('name', selectLabel);
 			selectElem.style.width = "200px";
 			selectElem.setAttribute('multiple', true);
 			spanElem.innerHTML = selectLabel;
@@ -93,14 +104,16 @@ class ResultsTable {
 			selectElem.addEventListener('change', function(e) {
 				let id = e.target.parentElement.parentElement.parentElement.children[1].innerText,
 					labelGroupName = e.target.name,
-					labelValues = [];
+					labelValues = [],
+					updateJson = {};
 				for(let valIn in e.target.options) {
 					let val = e.target.options[valIn];
 					if(val.selected) {
 						labelValues.push(val.innerText);
 					}
 				}
-				self.labelUpdateCallback(id, {labelGroupName: labelValues[0]});
+				updateJson[labelGroupName] = labelValues[0];
+				self.labelUpdateCallback(id, updateJson);
 			});
 			tagElem.appendChild(selectElem);
 		}		
@@ -123,6 +136,10 @@ class ResultsTable {
 		// Other columns
 		for(let titleIn in fields) {
 			let title = fields[titleIn];
+			if(title == 'id') {
+				this.tableFields.push(title);
+				continue;
+			}
 			headerElem = document.createElement('th');
 			headerElem.innerHTML = title;
 			rowElem.appendChild(headerElem);
@@ -141,6 +158,8 @@ class ResultsTable {
 				} else if(this.tableFields[j] == 'tags') {
 					let tagElem = this.addTagsElem();
 					colElem.appendChild(tagElem);
+				} else if(this.tableFields[j] == 'id') {
+					colElem.style.display = 'none';
 				}
 				rowElem.appendChild(colElem);
 			}
