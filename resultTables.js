@@ -56,10 +56,17 @@ class ResultsTable {
 
 				} else if(key == 'tags') {
 					//
-				} else {
-					let col = key in record ? record[key] : this.srNo++,
-					colElem = allCols[colIn];
+				} else if(key == 'Sr no') {
+					let col = this.srNo++,
+						colElem = allCols[colIn];
 					
+					colElem.innerHTML = col;
+				} else {
+					let col = record[key],
+						colElem = allCols[colIn];
+					if(col == undefined) {
+						col = "";
+					}
 					colElem.innerHTML = col;
 				}
 			}
