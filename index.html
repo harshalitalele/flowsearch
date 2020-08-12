@@ -6,6 +6,12 @@
 		<div>
 			<input id="search-box" type="text"/>
 			<button onclick="getResults()">Search</button>
+			<select onchange="filterResults(this)">
+				<option value="Surgery">Surgery</option>
+				<option value="Dermitology">Dermitology</option>
+				<option value="Student">Student</option>
+				<option value="Resident">Resident</option>
+			</select>
 		</div>
 		<div>
 			<button onclick=goprev()>Prev</button>

@@ -12,13 +12,14 @@ class ResultsTable {
 	tableFields;
 	srNo;
 	labelOptions;
-	constructor(data, fields, elementId, labelOptions) {
+	constructor(data, fields, elementId, labelOptions, labelUpdateCallback) {
 		// Clear if already in table
 		document.getElementById(elementId).innerHTML = '';
 		this.tableFields = [];
 		this.srNo = 0;
 		// display method pass in the element id
 		this.labelOptions = labelOptions;
+		this.labelUpdateCallback = labelUpdateCallback;
 		this.displayTable(fields, elementId, data.length);
 		// Define num of records and fields this table will display
 		this.updateData(data);
@@ -43,6 +44,10 @@ class ResultsTable {
 				if(key == 'flowchart') {
 					let imgElem = allCols[colIn].children[0];
 					imgElem.src = "diabetes-new/" + record['id'] + '.jpeg';
+					imgElem.style.cursor = 'pointer';
+					imgElem.addEventListener('click', function() {
+						window.open("diabetes-new/" + record['id'] + '.jpeg');
+					});
 				} else if(key == 'tags') {
 					//
 				} else {
@@ -71,6 +76,19 @@ class ResultsTable {
 				optionElem.innerHTML = optionsArr[optionLabel];
 				selectElem.appendChild(optionElem);
 			}
+			let self = this;
+			selectElem.addEventListener('change', function(e) {
+				let id = e.target.parentElement.parentElement.parentElement.children[1].innerText,
+					labelGroupName = e.target.name,
+					labelValues = [];
+				for(let valIn in e.target.options) {
+					let val = e.target.options[valIn];
+					if(val.selected) {
+						labelValues.push(val.innerText);
+					}
+				}
+				self.labelUpdateCallback(id, {labelGroupName: labelValues[0]});
+			});
 			tagElem.appendChild(selectElem);
 		}		
 		return tagElem;
@@ -81,6 +99,7 @@ class ResultsTable {
 		let tableElem = document.createElement('table'),
 			rowElem = document.createElement('tr'),
 			headerElem = document.createElement('th');
+		tableElem.border = '1';
 		this.tableId = elemId + '-table';
 		tableElem.setAttribute('id', this.tableId);
 		

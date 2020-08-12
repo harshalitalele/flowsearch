@@ -60,24 +60,46 @@ function getResults() {
 	pageNo = 0;
 	query = document.getElementById('search-box').value;
 	sendXMLReq(query, function(data) {
-		let fields = ['id', 'isbn', 'book', 'figure', /*'caption', 'text',*/ 'flowchart', 'tags'];
-		resTable = new ResultsTable(data, fields, 'print-data', labelOptions);
+		let fields = ['isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'tags', 'MedFocus'];
+		resTable = new ResultsTable(data, fields, 'print-data', labelOptions, updateSolr);
 	});
 }
-function updateSolr() {
+
+function updateSolr(id, updatedLabel) {
 	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			let data = JSON.parse(xhttp.responseText.trim());
+		}
+	};
+	xhttp.open("POST", "http://192.168.1.55:8983/solr/Diabetes/update/json?commitWithin=1000&overwrite=true&wt=json", true);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	let jsonToUpdate = {
+		"id": id
+	};
+	for(let key in updatedLabel) {
+		jsonToUpdate["MedFocus"] = { 'add': updatedLabel[key]}
+	}
+	xhttp.send(JSON.stringify([jsonToUpdate]));
+}
+
+function filterResults(elem) {
+	console.log(elem.options);
+	let selectedLabel = '';
+	for(let op in elem.options) {
+		if(elem.options[op].selected) {
+			selectedLabel = elem.options[op].innerText;
+		}
+	}
+	var xhttp = new XMLHttpRequest();	
 	xhttp.onreadystatechange = function() {		
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			let data = JSON.parse(xhttp.responseText.trim());
-			alert(data);
+			document.getElementById('num-results').innerHTML = data.response.numFound;
+			let fields = ['isbn', 'book', 'caption', /*'text',*/ 'flowchart', 'MedFocus'];
+			resTable = new ResultsTable(data.response.docs, fields, 'print-data', labelOptions, updateSolr);
 		};
 	};
-	xhttp.open("POST", "http://localhost:8983/solr/Diabetes/update/json?commitWithin=1000&overwrite=true&wt=json", true);
-	xhttp.setRequestHeader("Content-type", "application/json");
-	xhttp.send(JSON.stringify([{
-		    "id": "f319-03-9780323596480",
-		    "isbn": "9780323640596",
-		    "book": {set: "modified value, this is from the UI again!"},
-		    "figure": {set: "1020"},
-		  }]));
+	xhttp.open("GET", "http://192.168.1.55:5000/query?q=*&fq=MedFocus%3A" + selectedLabel + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
+	xhttp.send();
 }
