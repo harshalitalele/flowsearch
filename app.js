@@ -19,7 +19,8 @@ let pageNo = 0,
 		'Services' : ['Surgery', 'Urgent care', 'In patient', 'Out patient'],
 		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
 		'Use_case': ['Point of care', 'Case review', 'Study']
-	};
+	}, advFilters = true;
+showHideFilters();
 
 function goprev() {
 	pageNo -= 1;
@@ -54,6 +55,15 @@ function createTableElem(infoArr, numRec) {
 		}
 	}
 	return tableElem;
+}
+
+function showHideFilters() {
+	advFilters = !advFilters;
+	if(advFilters) {
+		document.getElementById('adv-filters').style.display = "block";
+	} else {
+		document.getElementById('adv-filters').style.display = "none";
+	}
 }
 
 function getResults() {

@@ -12,21 +12,28 @@
 		<div>
 			<input id="search-box" type="text"/>
 			<button onclick="getResults()">Search</button>
-			<select onchange="filterResults(this)">
-				<option value="Surgery">Surgery</option>
-				<option value="Dermitology">Dermatology</option>
-				<option value="Student">Student</option>
-				<option value="Resident">Resident</option>
-			</select>
 			<span id="msg" class="msg"></span>
 		</div>
 		<div>
-			<button onclick=goprev()>Prev</button>
-			<button onclick=gonext()>Next</button>
+			<span onclick="showHideFilters()" style="cursor: pointer; font-size: 18px;">Advanced Filters ></span>
+			<div id="adv-filters">
+				<hr/>
+				<select onchange="filterResults(this)">
+					<option value="Surgery">Surgery</option>
+					<option value="Dermitology">Dermatology</option>
+					<option value="Student">Student</option>
+					<option value="Resident">Resident</option>
+				</select>
+				<hr/>
+			</div>
 		</div>
 		<div>No of Results: <span id="num-results"></span></div>
 		<div id="print-data">
 			<table id="example" class="display" width="100%"></table>
+		</div>
+		<div>
+			<button onclick=goprev()>Prev</button>
+			<button onclick=gonext()>Next</button>
 		</div>
 		<div>
 			<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
