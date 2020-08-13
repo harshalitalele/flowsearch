@@ -20,6 +20,7 @@ let pageNo = 0,
 		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
 		'Use_case': ['Point of care', 'Case review', 'Study']
 	}, advFilters = true;
+addFilters();
 showHideFilters();
 
 function goprev() {
@@ -57,8 +58,33 @@ function createTableElem(infoArr, numRec) {
 	return tableElem;
 }
 
-function showHideFilters() {
-	advFilters = !advFilters;
+function addFilters() {
+	let filterElem = document.getElementById('adv-filters');
+	for(let opt in labelOptions) {
+		let divElem = document.createElement('div'),
+			catElem = document.createElement('div');
+		catElem.style.fontSize = '18px';
+		catElem.style.fontWeight = 'bold';
+		catElem.innerHTML = opt;
+		divElem.appendChild(catElem);
+		for(let labelIn in labelOptions[opt]) {
+			let checkElem = document.createElement('input'),
+				labelElem = document.createElement('label');
+			labelElem.style.margin = "3px";
+			labelElem.style.padding = "3px";
+			labelElem.style.backgroundColor = "lightgrey";
+			labelElem.innerHTML = labelOptions[opt][labelIn];
+			checkElem.setAttribute('type', 'checkbox');
+			labelElem.appendChild(checkElem);
+			divElem.appendChild(labelElem);
+		}
+
+		filterElem.appendChild(divElem);
+	}
+}
+
+function showHideFilters(isShow) {
+	advFilters = isShow ? isShow : !advFilters;
 	if(advFilters) {
 		document.getElementById('adv-filters').style.display = "block";
 	} else {
@@ -73,6 +99,7 @@ function getResults() {
 		let fields = ['id', 'isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'Labels', 'tags'];
 		resTable = new ResultsTable(data, fields, 'print-data', labelOptions, updateSolr);
 	});
+	showHideFilters(false);
 }
 
 function updateSolr(id, updatedLabel) {
@@ -96,6 +123,7 @@ function updateSolr(id, updatedLabel) {
 		jsonToUpdate[key] = { 'add': updatedLabel[key]}
 	}
 	xhttp.send(JSON.stringify([jsonToUpdate]));
+	showHideFilters(false);
 }
 
 function filterResults(elem) {
@@ -117,4 +145,5 @@ function filterResults(elem) {
 	};
 	xhttp.open("GET", "http://192.168.1.55:5000/query?q=*&fq=Medical_area%3A" + selectedLabel + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
 	xhttp.send();
+	showHideFilters(false);
 }
