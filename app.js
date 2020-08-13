@@ -5,7 +5,8 @@ function sendXMLReq(query, response) {
 			response(data.response.docs);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:5000/query?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
+	lastQueryUrl = "http://192.168.1.55:5000/query?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec;
+	xhttp.open("GET", lastQueryUrl, true);
 	xhttp.send();
 }
 
@@ -19,7 +20,8 @@ let pageNo = 0,
 		'Services' : ['Surgery', 'Urgent care', 'In patient', 'Out patient'],
 		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
 		'Use_case': ['Point of care', 'Case review', 'Study']
-	}, advFilters = true;
+	}, advFilters = true,
+	lastQueryUrl = '';
 addFilters();
 showHideFilters();
 
@@ -129,15 +131,9 @@ function updateSolr(id, updatedLabel) {
 }
 
 function filterResults(elem) {
-	//q=Medical_area%3ASurgery%20OR%20Focus%3ADiagnosis
-	let selectedLabel = {},
-		query = '';
+	let query = '';
 	for(let labelCat in labelOptions) {
-		if(!selectedLabel[labelCat]) {
-			selectedLabel[labelCat] = [];
-		}
 		$("input:checkbox[name=" + labelCat + "]:checked").each(function(){
-		    selectedLabel[labelCat].push($(this).val());
 		    if(query != '') {
 		    	query += ' OR ';
 		    }
@@ -154,7 +150,41 @@ function filterResults(elem) {
 			resTable = new ResultsTable(data.response.docs, fields, 'print-data', labelOptions, updateSolr);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:8983/solr/Diabetes/select?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
+	lastQueryUrl = "http://192.168.1.55:8983/solr/Diabetes/select?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec;
+	xhttp.open("GET", lastQueryUrl, true);
 	xhttp.send();
 	showHideFilters(false);
+}
+
+function downloadResults() {
+	let rows = [];
+	var xhttp = new XMLHttpRequest();	xhttp.onreadystatechange = function() {		
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			let data = JSON.parse(xhttp.responseText.trim());
+			//data.response.docs
+			//filename and labels array
+			for(let docIn in data.response.docs) {
+				let labels = '',
+					doc = data.response.docs[docIn];
+				for(let cat in labelOptions) {
+					if(doc[cat] != undefined) {
+						labels += doc[cat] + ",";
+					}
+				}
+				rows.push([doc.id, labels]);
+			}
+			let csvContent = "data:text/tsv;charset=utf-8," 
+			    + rows.map(e => e.join("\t")).join("\n");
+
+			var encodedUri = encodeURI(csvContent);
+			var link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", "test.tsv");
+			document.body.appendChild(link);
+
+			link.click();
+		};
+	};
+	xhttp.open("GET", lastQueryUrl, true);
+	xhttp.send();
 }
