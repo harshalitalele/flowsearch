@@ -75,6 +75,7 @@ function addFilters() {
 			labelElem.style.backgroundColor = "lightgrey";
 			labelElem.innerHTML = labelOptions[opt][labelIn];
 			checkElem.setAttribute('type', 'checkbox');
+			checkElem.setAttribute('name', opt);
 			labelElem.appendChild(checkElem);
 			divElem.appendChild(labelElem);
 		}

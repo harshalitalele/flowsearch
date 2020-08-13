@@ -11,15 +11,14 @@
 	<body>
 		<div>
 			<input id="search-box" type="text"/>
+			<button onclick="getResults()">Search</button>
 			<span id="msg" class="msg"></span>
 		</div>
 		<div>
-			<span onclick="showHideFilters()" style="cursor: pointer; font-size: 18px;">Label Filters ></span>
+			<span onclick="showHideFilters()" style="cursor: pointer; font-size: 18px;"> select labels ></span>
 			<div id="adv-filters">
 			</div>
-		</div>
-		<div>
-			<button onclick="getResults()">Search</button>
+			<button onclick="filterResults()">Apply</button>
 		</div>
 		<hr/>
 		<div>No of Results: <span id="num-results"></span></div>
