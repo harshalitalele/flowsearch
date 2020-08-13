@@ -18,7 +18,7 @@ let pageNo = 0,
 		'Focus' : ['Diagnosis', 'Management', 'Treatment including procedures', 'Lab tests'],
 		'Services' : ['Surgery', 'Urgent care', 'In patient', 'Out patient'],
 		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
-		'Use_case': ['{oint of care', 'Case review', 'Study']
+		'Use_case': ['Point of care', 'Case review', 'Study']
 	};
 
 function goprev() {

@@ -68,7 +68,7 @@ class ResultsTable {
 					for(let catIn in this.labelCats) {
 						let cat = this.labelCats[catIn];
 						if(record[cat] != undefined) 
-							col += cat + ': ' + record[cat] + '\n';
+							col += '<b>' + cat + '</b>: ' + record[cat] + '\n';
 					}
 					colElem.innerHTML = col;
 				} else {
@@ -88,11 +88,12 @@ class ResultsTable {
 		let tagElem = document.createElement('div');
 		for(let selectLabel in this.labelOptions) {
 			let spanElem = document.createElement('span'),
-				selectElem = document.createElement('select');
+				selectElem = document.createElement('select'),
+				labelElem = document.createElement('label');
+			labelElem.innerHTML = '<b>' + selectLabel + '</b>';
 			selectElem.setAttribute('name', selectLabel);
 			selectElem.style.width = "200px";
 			selectElem.setAttribute('multiple', true);
-			spanElem.innerHTML = selectLabel;
 			let optionsArr = this.labelOptions[selectLabel];
 			for(let optionLabel in optionsArr) {
 				let optionElem = document.createElement('option');
@@ -115,6 +116,7 @@ class ResultsTable {
 				updateJson[labelGroupName] = labelValues[0];
 				self.labelUpdateCallback(id, updateJson);
 			});
+			tagElem.appendChild(labelElem);
 			tagElem.appendChild(selectElem);
 		}		
 		return tagElem;
