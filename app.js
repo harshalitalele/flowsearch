@@ -69,7 +69,12 @@ function updateSolr(id, updatedLabel) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
-			let data = JSON.parse(xhttp.responseText.trim());
+			let data = JSON.parse(xhttp.responseText.trim()),
+				msgElem = document.getElementById('msg');
+			msgElem.innerHTML = "Labels updated";
+			setTimeout(function() {
+				msgElem.innerHTML = "";
+			}, 2000);
 		}
 	};
 	xhttp.open("POST", "http://192.168.1.55:8983/solr/Diabetes/update/json?commitWithin=1000&overwrite=true&wt=json", true);

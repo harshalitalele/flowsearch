@@ -1,6 +1,12 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+		<style type="text/css">
+			.msg {
+				font-size: 20px;
+				background-color: green;
+			}
+		</style>
 	</head>
 	<body>
 		<div>
@@ -12,6 +18,7 @@
 				<option value="Student">Student</option>
 				<option value="Resident">Resident</option>
 			</select>
+			<span id="msg" class="msg"></span>
 		</div>
 		<div>
 			<button onclick=goprev()>Prev</button>
