@@ -76,6 +76,7 @@ function addFilters() {
 			labelElem.innerHTML = labelOptions[opt][labelIn];
 			checkElem.setAttribute('type', 'checkbox');
 			checkElem.setAttribute('name', opt);
+			checkElem.setAttribute('value', labelOptions[opt][labelIn]);
 			labelElem.appendChild(checkElem);
 			divElem.appendChild(labelElem);
 		}
@@ -128,13 +129,22 @@ function updateSolr(id, updatedLabel) {
 }
 
 function filterResults(elem) {
-	console.log(elem.options);
-	let selectedLabel = '';
-	for(let op in elem.options) {
-		if(elem.options[op].selected) {
-			selectedLabel = elem.options[op].innerText;
+	//q=Medical_area%3ASurgery%20OR%20Focus%3ADiagnosis
+	let selectedLabel = {},
+		query = '';
+	for(let labelCat in labelOptions) {
+		if(!selectedLabel[labelCat]) {
+			selectedLabel[labelCat] = [];
 		}
+		$("input:checkbox[name=" + labelCat + "]:checked").each(function(){
+		    selectedLabel[labelCat].push($(this).val());
+		    if(query != '') {
+		    	query += ' OR ';
+		    }
+		    query += labelCat + ':' + $(this).val();
+		});
 	}
+
 	var xhttp = new XMLHttpRequest();	
 	xhttp.onreadystatechange = function() {		
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -144,7 +154,7 @@ function filterResults(elem) {
 			resTable = new ResultsTable(data.response.docs, fields, 'print-data', labelOptions, updateSolr);
 		};
 	};
-	xhttp.open("GET", "http://192.168.1.55:5000/query?q=*&fq=Medical_area%3A" + selectedLabel + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
+	xhttp.open("GET", "http://192.168.1.55:8983/solr/Diabetes/select?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec, true);
 	xhttp.send();
 	showHideFilters(false);
 }
