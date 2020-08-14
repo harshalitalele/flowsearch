@@ -44,11 +44,15 @@ class ResultsTable {
 				let key = this.tableFields[colIn];
 				if(key == 'flowchart') {
 					let imgElem = allCols[colIn].children[0],
-						imgSrc = "diabetes-new/" + record['id'] + ".jpeg";
+						imgSrc = "diabetes-new/" + record['id'] + ".jpeg",
+						errorChecked = false;
 					imgElem.src = imgSrc;
 					imgElem.onerror = function() {
-						imgSrc = "diabetes-new/" + record['id'] + ".jpg";
-						this.src = imgSrc;
+						if(!errorChecked) {
+							errorChecked = true;
+							imgSrc = "diabetes-new/" + record['id'] + ".jpg";
+							this.src = imgSrc;
+						}
 					};
 					imgElem.style.cursor = 'pointer';
 					imgElem.addEventListener('click', function() {
