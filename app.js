@@ -103,7 +103,6 @@ function getResults() {
 		let fields = ['id', 'isbn', 'book', 'caption',/* 'text',*/ 'flowchart', 'Labels', 'tags'];
 		resTable = new ResultsTable(data, fields, 'print-data', labelOptions, updateSolr);
 	});
-	showHideFilters(false);
 }
 
 function updateSolr(id, updatedLabel) {
@@ -127,7 +126,6 @@ function updateSolr(id, updatedLabel) {
 		jsonToUpdate[key] = { 'add': updatedLabel[key]}
 	}
 	xhttp.send(JSON.stringify([jsonToUpdate]));
-	showHideFilters(false);
 }
 
 function filterResults(elem) {
@@ -153,7 +151,6 @@ function filterResults(elem) {
 	lastQueryUrl = "http://192.168.1.55:8983/solr/Diabetes/select?q=" + query + "&rows=" + numRec + "&start=" + pageNo*numRec;
 	xhttp.open("GET", lastQueryUrl, true);
 	xhttp.send();
-	showHideFilters(false);
 }
 
 function downloadResults() {
