@@ -1,6 +1,8 @@
 <html>
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 		<style type="text/css">
 			.msg {
 				font-size: 20px;
@@ -26,10 +28,14 @@
 		</div>
 		<hr/>
 		<div>
-			<span onclick="showHideFilters()" style="cursor: pointer; font-size: 18px;"> select labels ></span>
+			<span onclick="showHideFilters()" style="cursor: pointer; font-size: 18px;">
+				select labels 
+				<i class='fas fa-angle-double-down' style='font-size:15px'></i>
+			</span>
 			<div id="adv-filters">
-			</div>
-			<button onclick="filterResults()">Apply</button>
+				<button onclick="filterResults()">Apply on complete corpus</button>
+				<button disabled="disabled">Apply on current search</button>
+			</div>			
 		</div>
 		<hr/>
 		<div>
