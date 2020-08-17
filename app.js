@@ -154,8 +154,9 @@ function filterResults(elem) {
 }
 
 function downloadResults() {
-	let rows = [];
-	var xhttp = new XMLHttpRequest();	xhttp.onreadystatechange = function() {		
+	let rows = [["isbn", "book", "caption", "imagepath", "labels"]];
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			let data = JSON.parse(xhttp.responseText.trim());
 			//data.response.docs
@@ -168,7 +169,7 @@ function downloadResults() {
 						labels += doc[cat] + ",";
 					}
 				}
-				rows.push([doc.id, labels]);
+				rows.push([doc.isbn, doc.book, doc.caption, "'/diabetes-new/" + doc.id + ".jpg'", labels]);
 			}
 			let csvContent = "data:text/tsv;charset=utf-8," 
 			    + rows.map(e => e.join("\t")).join("\n");

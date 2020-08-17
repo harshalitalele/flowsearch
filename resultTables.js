@@ -172,7 +172,7 @@ class ResultsTable {
 					colElem.style.display = 'none';
 				}
 				if(this.tableFields[j] == 'captions') {
-					colElem.style.maxWidth = '300px';
+					colElem.style.width = '300px';
 				}
 				rowElem.appendChild(colElem);
 			}
