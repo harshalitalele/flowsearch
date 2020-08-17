@@ -17,9 +17,9 @@ let pageNo = 0,
 	labelOptions = {
 		'Medical_area' : ['Surgery', 'Dermatology', 'Primary Care'],
 		'Focus' : ['Diagnosis', 'Management', 'Treatment including procedures', 'Lab tests'],
-		'Services' : ['Surgery', 'Urgent care', 'In_patient', 'Out_patient'],
+		'Services' : ['Surgery', 'Urgent care', 'In patient', 'Out patient'],
 		'Professional_level': ['Student', 'Resident', 'Clinician', 'Clinician extender', 'Nurse'],
-		'Use_case': ['Point_of_care', 'Case review', 'Study']
+		'Use_case': ['Point of care', 'Case review', 'Study']
 	}, advFilters = true,
 	lastQueryUrl = '';
 addFilters();
@@ -137,7 +137,7 @@ function filterResults(elem) {
 		    if(query != '') {
 		    	query += ' OR ';
 		    }
-		    query += labelCat + ':' + $(this).val();
+		    query += labelCat + ':"' + $(this).val() + '"';
 		});
 	}
 
