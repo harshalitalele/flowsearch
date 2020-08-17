@@ -153,14 +153,13 @@ function filterResults(elem) {
 	xhttp.send();
 }
 
+let numRecs;
 function downloadResults() {
 	let rows = [["isbn", "book", "caption", "imagepath", "labels"]];
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			let data = JSON.parse(xhttp.responseText.trim());
-			//data.response.docs
-			//filename and labels array
 			for(let docIn in data.response.docs) {
 				let labels = '',
 					doc = data.response.docs[docIn];
@@ -174,15 +173,11 @@ function downloadResults() {
 			let csvContent = "data:text/tsv;charset=utf-8," 
 			    + rows.map(e => e.join("\t")).join("\n");
 
-			var encodedUri = encodeURI(csvContent);
-			var link = document.createElement("a");
-			link.setAttribute("href", encodedUri);
-			link.setAttribute("download", "test.tsv");
-			document.body.appendChild(link);
-
-			link.click();
+			var url = URL.createObjectURL( new Blob( [csvContent], {type:'text/plain'} ) );
+    		$("#textLink").attr("href",url)[0].click();
 		};
 	};
-	xhttp.open("GET", lastQueryUrl, true);
+	let url = lastQueryUrl.split("&rows")[0] + "&rows=300&start=0";
+	xhttp.open("GET", url, true);
 	xhttp.send();
 }
