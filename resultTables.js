@@ -45,14 +45,18 @@ class ResultsTable {
 				if(key == 'flowchart') {
 					let imgElem = allCols[colIn].children[0],
 						imgSrc = "diabetes-new/" + record['id'] + ".jpeg",
-						errorChecked = false;
+						errorChecked = {jpg: false, png: false};
 					imgElem.src = imgSrc;
 					imgElem.onerror = function() {
-						if(!errorChecked) {
-							errorChecked = true;
+						if(!errorChecked.jpg) {
+							errorChecked.jpg = true;
 							imgSrc = "diabetes-new/" + record['id'] + ".jpg";
 							this.src = imgSrc;
-						}
+						} else if(!errorChecked.png) {
+							errorChecked.png = true;
+							imgSrc = "diabetes-new/" + record['id'] + ".png";
+							this.src = imgSrc;
+						} 
 					};
 					imgElem.style.cursor = 'pointer';
 					imgElem.addEventListener('click', function() {
