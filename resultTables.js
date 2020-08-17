@@ -126,6 +126,7 @@ class ResultsTable {
 			});
 			tagElem.appendChild(labelElem);
 			tagElem.appendChild(selectElem);
+			tagElem.appendChild(document.createElement("br"));
 		}		
 		return tagElem;
 	}
